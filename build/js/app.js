@@ -1,4 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+exports.apiKey = "433e8c7286499246ed8f97e2764cdf79";
+
+},{}],2:[function(require,module,exports){
 function Alarm(setTime) {
   this.time = setTime;
 }
@@ -28,7 +31,23 @@ Alarm.prototype.checkTime = function() {
 
 exports.alarmModule = Alarm;
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
+var apiKey = require('./../.env').apiKey;
+
+function Weather(){
+}
+
+Weather.prototype.getWeather = function(city) {
+  $.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey).then(function(response) {
+    $('.showWeather').text("The humidity in " + city + " is " + response.main.humidity + "%");
+  }).fail(function(error) {
+    $('.showWeather').text(error.responseJSON.message);
+  });
+}
+
+exports.weatherModule = Weather;
+
+},{"./../.env":1}],4:[function(require,module,exports){
 var Alarm = require('./../js/alarm.js').alarmModule;
 
 function Alarm(setTime) {
@@ -69,20 +88,16 @@ $(document).ready(function(){
   });
 });
 
-var apiKey = "433e8c7286499246ed8f97e2764cdf79";
+var apiKey = require('./../.env').apiKey;
+var Weather = require('./../js/weather.js').weatherModule;
 
 $(document).ready(function() {
-  $("#weatherLocation").click(function(){
-    var city = $("#location").val();
-    $("#location").val("");
-    $(".showCity").text("The city you have chosen is " + city + ".");
-    $.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey) .then(function(response) {
-      $('.showWeather').text("The humidity in " + city + " is " + response.main.humidity + "%");
-    })
-    .fail(function(error) {
-        $('.showWeather').text(error.responseJSON.message);
-      });
+  var currentWeatherObject = new Weather();
+  $('#weatherLocation').click(function() {
+    var city = $('#location').val();
+    $('#location').val("");
+    currentWeatherObject.getWeather(city);
   });
 });
 
-},{"./../js/alarm.js":1}]},{},[2]);
+},{"./../.env":1,"./../js/alarm.js":2,"./../js/weather.js":3}]},{},[4]);
