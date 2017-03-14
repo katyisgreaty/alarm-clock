@@ -9,7 +9,7 @@ Alarm.prototype.checkTime = function() {
   var formattedNowTime = moment().hour(parseInt(nowTime[0])).minute(parseInt(nowTime[1]));
   var result;
 
-  console.log(formattedNowTime.hour())
+  console.log(formattedNowTime.hour());
   if(formattedNowTime.hour() >= this.time.hour() && formattedNowTime.minute() >= this.time.minute()) {
     result = true;
   }
@@ -46,12 +46,18 @@ $(document).ready(function(){
       }
 
       var newAlarm = new Alarm(formattedTime);
-      setInterval(function(){
-      var isPastTime = newAlarm.checkTime();
-      if(isPastTime === true) {
-        $('#result').show();
+      var interval  = setInterval(function(){
+        var isPastTime = newAlarm.checkTime();
+        if(isPastTime === true) {
+          $('#result').show();
+          clearInterval(interval);
       }
-    }, 10000);
+    }, 2000);
+    
+      $("#stop").click(function(event) {
+        event.preventDefault();
+        $('#result').hide();
+      });
   });
 });
 

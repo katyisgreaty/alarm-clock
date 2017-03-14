@@ -21,11 +21,17 @@ $(document).ready(function(){
       }
 
       var newAlarm = new Alarm(formattedTime);
-      setInterval(function(){
-      var isPastTime = newAlarm.checkTime();
-      if(isPastTime === true) {
-        $('#result').show();
+      var interval  = setInterval(function(){
+        var isPastTime = newAlarm.checkTime();
+        if(isPastTime === true) {
+          $('#result').show();
+          clearInterval(interval);
       }
-    }, 10000);
+    }, 2000);
+    
+      $("#stop").click(function(event) {
+        event.preventDefault();
+        $('#result').hide();
+      });
   });
 });
