@@ -5,10 +5,11 @@ function Alarm(setTime) {
 Alarm.prototype.checkTime = function() {
   var nowTime = moment().format('LT');
   nowTime = nowTime.split(":");
-  var formattedNowTime = moment().hour(nowTime[0]).minute(nowTime[1]);
+  var formattedNowTime = moment().hour(parseInt(nowTime[0])).minute(parseInt(nowTime[1]));
   var result;
 
-  if(formattedNowTime.isSameOrAfter(this.time)) {
+  console.log(formattedNowTime.hour())
+  if(formattedNowTime.hour() >= this.time.hour() && formattedNowTime.minute() >= this.time.minute()) {
     result = true;
   }
   else {
