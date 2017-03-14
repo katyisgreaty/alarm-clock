@@ -11,11 +11,11 @@ $(document).ready(function(){
   var formattedNowTime = moment().hour(parseInt(nowTime[0])).minute(parseInt(nowTime[1]));
   $("#alarm-set").submit(function(event) {
     event.preventDefault();
-    setInterval(function(){
       var time = $("#alarm").val();
       time = time.split(':');
       var formattedTime = moment().hour(parseInt(time[0])).minute(parseInt(time[1]));
       var newAlarm = new Alarm(formattedTime);
+      setInterval(function(){
       var isPastTime = newAlarm.checkTime();
       if(isPastTime === true) {
         $('#result').show();
